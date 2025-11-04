@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - CWF Color Palette Form</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Main Content Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-title p {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Documentation Sections */
+        .doc-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid #3498db;
+        }
+
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-list {
+            list-style-type: none;
+            counter-reset: step-counter;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1.5rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+
+        .step-list li:before {
+            content: counter(step-counter);
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: bold;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .color-preview {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .color-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 1.5rem;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: #7f8c8d;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-main {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            color: #3498db;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: #3498db;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            margin-top: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-main {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <h1>CWF</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="documentation.html">Documentation</a>
+                <a href="about-us.html">About Us</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-title">
+            <h1>CWF Color Palette Form Documentation</h1>
+            <p>Learn how to use our interactive color palette form to define your visual identity and create meaningful color schemes.</p>
+        </div>
+
+        <section class="doc-section">
+            <h2 class="section-title">Introduction</h2>
+            <p>The CWF Color Palette Form is an innovative tool that helps individuals and businesses define their visual identity through color. Unlike traditional forms, our approach focuses on the emotional and psychological aspects of color selection.</p>
+            <p>This documentation will guide you through using the form, understanding its features, and implementing the generated color palettes in your projects.</p>
+        </section>
+
+        <section class="doc-section">
+            <h2 class="section-title">How It Works</h2>
+            <p>The color palette creation process follows three intuitive steps:</p>
+            <ol class="step-list">
+                <li>
+                    <h3>Color Selection</h3>
+                    <p>Choose 3-5 colors that resonate with your brand or project from our curated color wheel. The interface allows you to pick from a wide spectrum of hues with precision.</p>
+                </li>
+                <li>
+                    <h3>Emotional Assignment</h3>
+                    <p>Assign emotional values and characteristics to each selected color. This step transforms your color choices from mere aesthetics to meaningful communication tools.</p>
+                </li>
+                <li>
+                    <h3>Priority & Context</h3>
+                    <p>Arrange your colors by importance and specify the context for your palette (brand identity, interior design, product design, etc.).</p>
+                </li>
+            </ol>
+        </section>
+
+        <section class="doc-section">
+            <h2 class="section-title">Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Intuitive Color Wheel</h3>
+                    <p>Interactive color selection with precise controls and curated color suggestions based on design principles.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Emotional Mapping</h3>
+                    <p>Connect colors to specific emotions and brand values to create psychologically resonant palettes.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Priority Assignment</h3>
+                    <p>Drag-and-drop interface to establish color hierarchy within your palette.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Context Awareness</h3>
+                    <p>Tailor your palette for specific applications like web design, print, or environmental spaces.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Export Options</h3>
+                    <p>Download your palette in multiple formats including HEX, RGB, CMYK, and CSS variables.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Accessibility Checking</h3>
+                    <p>Automated contrast ratio analysis to ensure your palette meets accessibility standards.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2 class="section-title">Implementation Example</h2>
+            <p>Here's a basic example of how to implement a color palette generated by our form:</p>
+            <div class="code-block">
+/* CSS Variables for Generated Palette */
+:root {
+  --primary-color: #3498db;   /* Trust & Stability */
+  --secondary-color: #2ecc71; /* Growth & Nature */
+  --accent-color: #e74c3c;    /* Energy & Action */
+  --neutral-light: #ecf0f1;
+  --neutral-dark: #2c3e50;
+}
+
+/* Usage in your CSS */
+.header {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.cta-button {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.card {
+  border: 1px solid var(--neutral-light);
+  background: white;
+}
+            </div>
+            <p>This structured approach ensures consistency across your entire project while maintaining the emotional resonance of your color choices.</p>
+        </section>
+
+        <section class="doc-section">
+            <h2 class="section-title">Color Psychology Guide</h2>
+            <p>Understanding the emotional impact of colors can help you make better selections in our form:</p>
+            
+            <div class="color-preview">
+                <div class="color-box" style="background-color: #3498db;">Blue</div>
+                <div class="color-box" style="background-color: #2ecc71;">Green</div>
+                <div class="color-box" style="background-color: #e74c3c;">Red</div>
+                <div class="color-box" style="background-color: #f39c12;">Orange</div>
+                <div class="color-box" style="background-color: #9b59b6;">Purple</div>
+            </div>
+            
+            <ul>
+                <li><strong>Blue</strong>: Trust, stability, professionalism, calm</li>
+                <li><strong>Green</strong>: Growth, nature, health, prosperity</li>
+                <li><strong>Red</strong>: Energy, passion, urgency, excitement</li>
+                <li><strong>Orange</strong>: Creativity, friendliness, enthusiasm</li>
+                <li><strong>Purple</strong>: Luxury, wisdom, creativity, mystery</li>
+            </ul>
+        </section>
+
+        <section class="doc-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">How many colors should I select for my palette?</div>
+                <div class="faq-answer">We recommend selecting 3-5 colors. This provides enough variety for visual interest while maintaining cohesion. Typically, this includes 1-2 primary colors, 1-2 secondary colors, and 1 accent color.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I save and edit my palettes later?</div>
+                <div class="faq-answer">Yes, registered users can save their palettes to their account and make edits at any time. You can also create multiple palettes for different projects.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How does the emotional assignment affect my palette?</div>
+                <div class="faq-answer">The emotional assignments help our algorithm suggest complementary colors and provide usage guidelines. For example, if you assign "Trust" to a blue color, we might suggest lighter blues for backgrounds and darker shades for important elements.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I import existing brand colors?</div>
+                <div class="faq-answer">Yes, you can input existing HEX, RGB, or CMYK values to incorporate them into your new palette. Our tool will help you find complementary colors that work with your existing brand colors.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Is there a limit to how many palettes I can create?</div>
+                <div class="faq-answer">Free accounts can create up to 5 palettes. Premium subscribers have unlimited palette creation and additional features like advanced export options and collaboration tools.</div>
+            </div>
+        </section>
+
+        <section class="doc-section">
+            <h2 class="section-title">Support</h2>
+            <p>If you need assistance with the CWF Color Palette Form, we're here to help:</p>
+            <ul>
+                <li><strong>Email Support</strong>: CWF@gmail.com</li>
+                <li><strong>Documentation</strong>: Our full API documentation is available for developers</li>
+                <li><strong>Community Forum</strong>: Share ideas and get inspiration from other users</li>
+                <li><strong>Tutorial Videos</strong>: Step-by-step guides on our YouTube channel</li>
+            </ul>
+            <p>For technical issues or feature requests, please contact our support team with details about your specific needs.</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-main">
+            <div class="footer-column">
+                <h3>CWF</h3>
+                <p>Creating meaningful color experiences through innovative design tools and psychological principles.</p>
+                <p>Lagos, Nigeria</p>
+                <p>+234 80 277 210 06</p>
+                <p>CWF@gmail.com</p>
+            </div>
+            <div class="footer-column">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="documentation.html">Documentation</a></li>
+                    <li><a href="#">Tutorials</a></li>
+                    <li><a href="#">Color Psychology Guide</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="about-us.html">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 CWF. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
