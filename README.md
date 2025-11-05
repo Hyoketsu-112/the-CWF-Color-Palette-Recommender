@@ -4,7 +4,7 @@ A responsive, interactive web application that helps users create meaningful col
 
 ![CWF Demo](![Screenshot_4-11-2025_192619_127 0 0 1](https://github.com/user-attachments/assets/221326d3-dc6d-452a-8510-ece85f6248f8)
 )
-*Replace with your actual screenshot or GIF*
+
 
 ## 🚀 Features
 
