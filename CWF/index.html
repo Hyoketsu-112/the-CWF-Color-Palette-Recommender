@@ -4,19 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CWF - Color Palette Recommender</title>
+    <meta name="description" content="Create meaningful color palettes that communicate your brand's values and emotions">
     <link rel="stylesheet" href="/style/style.css">
+    <script src="/js/script.js" defer></script>
 </head>
 <body>
     <header>
-        <section class="container">
+        <div class="container">
             <div class="logo">
                 <h1>CWF</h1>
             </div>
             <nav class="nav-links">
-                <a href="/docs/documentation.html" class="nav-button">Get Started</a>
-                <a href="about-us.html" class="nav-button">About Us</a>
+                <a href="index.html">Home</a>
+                <a href="documentation.html">Documentation</a>
+                <a href="about-us.html">About Us</a>
+                <div class="user-menu" id="userMenu">
+                    <a href="#" id="authTrigger" class="nav-button">Login</a>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="dashboard.html">Dashboard</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
             </nav>
-        </section>
+        </div>
     </header>
 
     <main>
@@ -33,13 +43,21 @@
 
     <footer>
         <div class="footer-main">
-            <div class="footer-column footer-brand">
-                <div class="brand-logo">
-                    <span>CWF</span>
-                </div>
-                <p>Lagos, Lagos, Nigeria</p>
+            <div class="footer-column">
+                <h3>CWF</h3>
+                <p>Creating meaningful color experiences through innovative design tools and psychological principles.</p>
+                <p>Lagos, Nigeria</p>
                 <p>+234 80 277 210 06</p>
                 <p>CWF@gmail.com</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="documentation.html">Documentation</a></li>
+                    <li><a href="about-us.html">About Us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
             </div>
             <div class="footer-column">
                 <h3>Services</h3>
@@ -51,23 +69,99 @@
                 </ul>
             </div>
             <div class="footer-column">
-                <h3>Company</h3>
+                <h3>Connect</h3>
                 <ul>
-                    <li><a href="about-us.html">About Us</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Our Team</a></li>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                    <li><a href="#"><i class="fab fa-dribbble"></i> Dribbble</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2025 CWF. All rights reserved.</p>
             <div class="footer-bottom-links">
-                <a href="#">Privacy</a>
-                <a href="#">Terms</a>
-                <a href="#">Cookies</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
             </div>
         </div>
     </footer>
+
+    <!-- Feedback Modal -->
+    <div class="feedback-modal" id="feedbackModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-icon">🎨</div>
+            <h2 class="modal-title">Help Us Improve CWF</h2>
+            <p class="modal-text">We're constantly working to enhance your experience. Would you mind sharing your feedback about our website?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-primary" id="shareFeedback">
+                    Share Feedback
+                </button>
+                <button class="modal-btn modal-btn-secondary" id="maybeLater">
+                    Maybe Later
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Corner Feedback Button -->
+    <div class="feedback-corner">
+        <button class="feedback-trigger" id="cornerFeedbackBtn">
+            <span>💬</span> Feedback
+        </button>
+    </div>
+
+    <!-- Authentication Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-content">
+            <button class="auth-close" id="authClose">&times;</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+            
+            <div class="auth-form active" id="login-form">
+                <h2>Welcome Back</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="auth-submit">Login</button>
+                </form>
+                <p class="auth-switch">Don't have an account? <a href="#" data-switch="register">Sign up</a></p>
+            </div>
+            
+            <div class="auth-form" id="register-form">
+                <h2>Create Account</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirm">Confirm Password</label>
+                        <input type="password" id="registerConfirm" required>
+                    </div>
+                    <button type="submit" class="auth-submit">Create Account</button>
+                </form>
+                <p class="auth-switch">Already have an account? <a href="#" data-switch="login">Sign in</a></p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -353,3 +353,434 @@
             console.log('Palette submitted:', paletteData);
             alert('Your palette has been saved! In a real application, this would be stored in our database.');
         }
+
+         // Feedback Modal Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('feedbackModal');
+            const modalClose = document.getElementById('modalClose');
+            const shareFeedbackBtn = document.getElementById('shareFeedback');
+            const maybeLaterBtn = document.getElementById('maybeLater');
+            const cornerFeedbackBtn = document.getElementById('cornerFeedbackBtn');
+            const formUrl = 'https://forms.gle/N1RRqoK7sAw1Jrx6A';
+            
+            // Check if user has already seen the modal in this session
+            let feedbackShown = sessionStorage.getItem('feedbackShown');
+            
+            // Show modal after 30 seconds if not shown before
+            if (!feedbackShown) {
+                setTimeout(showModal, 30000);
+            }
+            
+            // Show modal when user tries to leave the page
+            window.addEventListener('beforeunload', function(e) {
+                if (!feedbackShown && !modal.classList.contains('active')) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                    showModal();
+                    return '';
+                }
+            });
+            
+            // Show modal when corner button is clicked
+            cornerFeedbackBtn.addEventListener('click', showModal);
+            
+            // Close modal when X is clicked
+            modalClose.addEventListener('click', hideModal);
+            
+            // Close modal when "Maybe Later" is clicked
+            maybeLaterBtn.addEventListener('click', function() {
+                hideModal();
+                sessionStorage.setItem('feedbackShown', 'true');
+            });
+            
+            // Open feedback form when "Share Feedback" is clicked
+            shareFeedbackBtn.addEventListener('click', function() {
+                window.open(formUrl, '_blank');
+                sessionStorage.setItem('feedbackShown', 'true');
+                hideModal();
+            });
+            
+            // Close modal when clicking outside content
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    hideModal();
+                }
+            });
+            
+            function showModal() {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+            
+            function hideModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+            
+            // Add slight delay to corner button appearance
+            setTimeout(() => {
+                cornerFeedbackBtn.style.opacity = '1';
+                cornerFeedbackBtn.style.transform = 'translateY(0)';
+            }, 2000);
+            
+            // Initial styles for corner button animation
+            cornerFeedbackBtn.style.opacity = '0';
+            cornerFeedbackBtn.style.transform = 'translateY(20px)';
+            cornerFeedbackBtn.style.transition = 'opacity 0.5s, transform 0.5s';
+        });
+
+        // Authentication functionality
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Check login status on page load
+    updateAuthUI();
+    
+    // Auth modal functionality
+    const authModal = document.getElementById('authModal');
+    const authClose = document.getElementById('authClose');
+    const authTrigger = document.getElementById('authTrigger');
+    const authTabs = document.querySelectorAll('.auth-tab');
+    const authForms = document.querySelectorAll('.auth-form');
+    const authSwitches = document.querySelectorAll('.auth-switch a');
+    
+    if (authTrigger) {
+        authTrigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            showAuthModal();
+        });
+    }
+    
+    if (authClose) {
+        authClose.addEventListener('click', hideAuthModal);
+    }
+    
+    // Tab switching
+    authTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabName = this.getAttribute('data-tab');
+            
+            // Update tabs
+            authTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Update forms
+            authForms.forEach(form => form.classList.remove('active'));
+            document.getElementById(`${tabName}-form`).classList.add('active');
+        });
+    });
+    
+    // Form switching links
+    authSwitches.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetTab = this.getAttribute('data-switch');
+            
+            // Switch to the target tab
+            authTabs.forEach(tab => {
+                if (tab.getAttribute('data-tab') === targetTab) {
+                    tab.click();
+                }
+            });
+        });
+    });
+    
+    // Form submissions
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+    }
+    
+    if (registerForm) {
+        registerForm.addEventListener('submit', handleRegister);
+    }
+    
+    // Logout functionality
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+    }
+});
+
+function showAuthModal() {
+    const authModal = document.getElementById('authModal');
+    if (authModal) {
+        authModal.style.display = 'flex';
+    }
+}
+
+function hideAuthModal() {
+    const authModal = document.getElementById('authModal');
+    if (authModal) {
+        authModal.style.display = 'none';
+    }
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    // Simple validation
+    if (!email || !password) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    // Check if user exists
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.email === email && u.password === password);
+    
+    if (user) {
+        // Login successful
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        updateAuthUI();
+        hideAuthModal();
+        alert('Login successful!');
+        
+        // Redirect if on form page after creating palette
+        if (window.location.pathname.includes('form.html')) {
+            const tempPalette = JSON.parse(localStorage.getItem('tempPaletteToSave'));
+            if (tempPalette) {
+                savePaletteToUser(user.id, tempPalette);
+                localStorage.removeItem('tempPaletteToSave');
+                window.location.href = 'dashboard.html';
+            }
+        }
+    } else {
+        alert('Invalid email or password');
+    }
+}
+
+function handleRegister(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('registerName').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+    const confirm = document.getElementById('registerConfirm').value;
+    
+    // Validation
+    if (!name || !email || !password || !confirm) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    if (password !== confirm) {
+        alert('Passwords do not match');
+        return;
+    }
+    
+    if (password.length < 6) {
+        alert('Password must be at least 6 characters');
+        return;
+    }
+    
+    // Check if user already exists
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    if (users.find(u => u.email === email)) {
+        alert('User with this email already exists');
+        return;
+    }
+    
+    // Create new user
+    const newUser = {
+        id: generateUserId(),
+        name: name,
+        email: email,
+        password: password, // In a real app, this would be hashed
+        createdAt: new Date().toISOString()
+    };
+    
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+    
+    // Auto-login
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
+    updateAuthUI();
+    hideAuthModal();
+    alert('Account created successfully!');
+    
+    // Redirect if on form page after creating palette
+    if (window.location.pathname.includes('form.html')) {
+        const tempPalette = JSON.parse(localStorage.getItem('tempPaletteToSave'));
+        if (tempPalette) {
+            savePaletteToUser(newUser.id, tempPalette);
+            localStorage.removeItem('tempPaletteToSave');
+            window.location.href = 'dashboard.html';
+        }
+    }
+}
+
+function handleLogout() {
+    localStorage.removeItem('currentUser');
+    updateAuthUI();
+    alert('Logged out successfully');
+    
+    // Redirect to home if on dashboard
+    if (window.location.pathname.includes('dashboard.html')) {
+        window.location.href = 'index.html';
+    }
+}
+
+function updateAuthUI() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const authTrigger = document.getElementById('authTrigger');
+    const userDropdown = document.getElementById('userDropdown');
+    const userName = document.getElementById('userName');
+    
+    if (currentUser) {
+        // User is logged in
+        if (authTrigger) {
+            authTrigger.textContent = currentUser.name;
+            authTrigger.style.display = 'none';
+        }
+        if (userName) {
+            userName.textContent = currentUser.name;
+        }
+        if (userDropdown) {
+            userDropdown.style.display = 'block';
+        }
+    } else {
+        // User is not logged in
+        if (authTrigger) {
+            authTrigger.textContent = 'Login';
+            authTrigger.style.display = 'block';
+        }
+        if (userDropdown) {
+            userDropdown.style.display = 'none';
+        }
+    }
+}
+
+function generateUserId() {
+    return 'user_' + Math.random().toString(36).substr(2, 9);
+}
+
+// Add these functions to script.js
+function savePaletteToUser(userId, paletteData) {
+    const userPalettes = JSON.parse(localStorage.getItem('userPalettes') || '{}');
+    
+    if (!userPalettes[userId]) {
+        userPalettes[userId] = [];
+    }
+    
+    const paletteWithId = {
+        id: generatePaletteId(),
+        ...paletteData,
+        createdAt: new Date().toISOString(),
+        favorite: false
+    };
+    
+    userPalettes[userId].push(paletteWithId);
+    localStorage.setItem('userPalettes', JSON.stringify(userPalettes));
+    return paletteWithId;
+}
+
+function generatePaletteId() {
+    return 'palette_' + Math.random().toString(36).substr(2, 9);
+}
+
+// Update the submitPalette function to work with user accounts
+function submitPalette() {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const paletteData = {
+        colors: colorPriority.map(color => ({
+            hex: color,
+            meanings: colorMeanings[color] || [],
+            priority: colorPriority.indexOf(color) + 1
+        })),
+        name: prompt("Give your palette a name:", "My Color Palette") || "Untitled Palette"
+    };
+    
+    if (currentUser) {
+        // User is logged in - save to their account
+        const savedPalette = savePaletteToUser(currentUser.id, paletteData);
+        alert('Your palette has been saved to your account!');
+        
+        // Redirect to dashboard
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1500);
+    } else {
+        // User is not logged in - prompt to login or save temporarily
+        const saveChoice = confirm('Would you like to create an account to save this palette? Click OK to register or Cancel to download it now.');
+        
+        if (saveChoice) {
+            // Save palette temporarily and redirect to auth
+            localStorage.setItem('tempPaletteToSave', JSON.stringify(paletteData));
+            showAuthModal();
+        } else {
+            // Just download the palette
+            exportPalette('json');
+            alert('Palette downloaded. Create an account to save and manage your palettes!');
+        }
+    }
+}
+
+// On page load, check for temp palette to save
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if user is logged in and update UI accordingly
+    updateAuthUI();
+    
+    // If user has a temporary palette to save, notify them
+    const tempPalette = localStorage.getItem('tempPaletteToSave');
+    if (tempPalette) {
+        console.log('Temporary palette found - user can save after form completion');
+    }
+});
+
+// Add to script.js for enhanced features
+function toggleFavorite(paletteId) {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) return;
+    
+    const userPalettes = JSON.parse(localStorage.getItem('userPalettes') || '{}');
+    const palette = userPalettes[currentUser.id].find(p => p.id === paletteId);
+    
+    if (palette) {
+        palette.favorite = !palette.favorite;
+        localStorage.setItem('userPalettes', JSON.stringify(userPalettes));
+        loadUserPalettes(currentUser.id); // Refresh display
+    }
+}
+
+function deletePalette(paletteId) {
+    if (confirm('Are you sure you want to delete this palette?')) {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const userPalettes = JSON.parse(localStorage.getItem('userPalettes') || '{}');
+        
+        userPalettes[currentUser.id] = userPalettes[currentUser.id].filter(p => p.id !== paletteId);
+        localStorage.setItem('userPalettes', JSON.stringify(userPalettes));
+        loadUserPalettes(currentUser.id);
+    }
+}
+
+// Add to your script.js - User dropdown functionality
+function setupUserDropdown() {
+    const userMenu = document.getElementById('userMenu');
+    const userName = document.getElementById('userName');
+    const userDropdown = document.getElementById('userDropdown');
+    
+    if (userName && userDropdown) {
+        userName.addEventListener('click', function(e) {
+            e.preventDefault();
+            userDropdown.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userMenu.contains(e.target)) {
+                userDropdown.classList.remove('show');
+            }
+        });
+    }
+}
+
+// Call this function in your DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', function() {
+    // ... your existing code
+    setupUserDropdown();
+});

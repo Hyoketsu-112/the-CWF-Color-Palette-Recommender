@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CWF</title>
+    <meta name="description" content="Manage your color palettes and insights with CWF Dashboard">
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="/js/script.js" defer></script>
+    <style>
+        /* Dashboard-specific styles */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-welcome h1 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .dashboard-welcome p {
+            color: #666;
+        }
+        
+        .create-palette-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .create-palette-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        
+        .saved-palettes {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .palette-analytics {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .palettes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .palette-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .palette-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .palette-colors {
+            display: flex;
+            height: 120px;
+        }
+        
+        .palette-color {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        .palette-info {
+            padding: 1rem;
+            background: white;
+        }
+        
+        .palette-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .palette-date {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .analytics-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .stat-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #999;
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 968px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>CWF</h1>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="documentation.html">Documentation</a>
+                <a href="about-us.html">About Us</a>
+                <div class="user-menu" id="userMenu">
+                    <a href="#" id="authTrigger" class="nav-button">Login</a>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="dashboard.html">Dashboard</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div class="dashboard-welcome">
+                <h1>Welcome back, <span id="userGreeting">User</span>!</h1>
+                <p>Manage your color palettes and insights</p>
+            </div>
+            <a href="form.html" class="create-palette-btn">Create New Palette</a>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="saved-palettes">
+                <h2 class="section-title">Your Color Stories</h2>
+                <div class="palettes-grid" id="palettesGrid">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="palette-analytics">
+                <h2 class="section-title">Color Insights</h2>
+                <div class="analytics-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalPalettes">0</div>
+                        <div class="stat-label">Total Palettes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="favoritesCount">0</div>
+                        <div class="stat-label">Favorites</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="lastCreated">-</div>
+                        <div class="stat-label">Last Created</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="mostUsedColor">-</div>
+                        <div class="stat-label">Top Color</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-main">
+            <div class="footer-column">
+                <h3>CWF</h3>
+                <p>Creating meaningful color experiences through innovative design tools and psychological principles.</p>
+                <p>Lagos, Nigeria</p>
+                <p>+234 80 277 210 06</p>
+                <p>CWF@gmail.com</p>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="documentation.html">Documentation</a></li>
+                    <li><a href="about-us.html">About Us</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Services</h3>
+                <ul>
+                    <li><a href="#">Color Analysis</a></li>
+                    <li><a href="#">Brand Palettes</a></li>
+                    <li><a href="#">Interior Design</a></li>
+                    <li><a href="#">Custom Solutions</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                    <li><a href="#"><i class="fab fa-dribbble"></i> Dribbble</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 CWF. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dashboard functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Update user greeting
+            document.getElementById('userGreeting').textContent = currentUser.name;
+            
+            // Load user's palettes
+            loadUserPalettes(currentUser.id);
+            
+            // Load analytics
+            loadAnalytics(currentUser.id);
+            
+            // Add logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                handleLogout();
+            });
+        });
+        
+        function loadUserPalettes(userId) {
+            const userPalettes = JSON.parse(localStorage.getItem('userPalettes') || '{}');
+            const userPalettesList = userPalettes[userId] || [];
+            const palettesGrid = document.getElementById('palettesGrid');
+            
+            if (userPalettesList.length === 0) {
+                palettesGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">🎨</div>
+                        <h3>No palettes yet</h3>
+                        <p>Create your first color palette to get started!</p>
+                        <a href="form.html" class="create-palette-btn" style="display: inline-block; margin-top: 1rem;">Create Palette</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            palettesGrid.innerHTML = userPalettesList.map(palette => `
+                <div class="palette-card" onclick="viewPalette('${palette.id}')">
+                    <div class="palette-colors">
+                        ${palette.colors.map(color => `
+                            <div class="palette-color" style="background-color: ${color.hex}; color: ${getContrastColor(color.hex)}">
+                                ${color.hex}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="palette-info">
+                        <div class="palette-name">${palette.name || 'Untitled Palette'}</div>
+                        <div class="palette-date">Created: ${new Date(palette.createdAt).toLocaleDateString()}</div>
+                        <div class="palette-stats">${palette.colors.length} colors</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function loadAnalytics(userId) {
+            const userPalettes = JSON.parse(localStorage.getItem('userPalettes') || '{}');
+            const userPalettesList = userPalettes[userId] || [];
+            
+            // Update stats
+            document.getElementById('totalPalettes').textContent = userPalettesList.length;
+            
+            const favorites = userPalettesList.filter(p => p.favorite).length;
+            document.getElementById('favoritesCount').textContent = favorites;
+            
+            if (userPalettesList.length > 0) {
+                const latest = userPalettesList.reduce((latest, current) => 
+                    new Date(current.createdAt) > new Date(latest.createdAt) ? current : latest
+                );
+                document.getElementById('lastCreated').textContent = 
+                    new Date(latest.createdAt).toLocaleDateString();
+                
+                // Find most used color (simplified)
+                const colorCounts = {};
+                userPalettesList.forEach(palette => {
+                    palette.colors.forEach(color => {
+                        colorCounts[color.hex] = (colorCounts[color.hex] || 0) + 1;
+                    });
+                });
+                
+                const mostUsed = Object.keys(colorCounts).reduce((a, b) => 
+                    colorCounts[a] > colorCounts[b] ? a : b
+                );
+                document.getElementById('mostUsedColor').textContent = mostUsed;
+            }
+        }
+        
+        function getContrastColor(hexcolor) {
+            // Function to determine if text should be white or black based on background
+            const r = parseInt(hexcolor.substr(1, 2), 16);
+            const g = parseInt(hexcolor.substr(3, 2), 16);
+            const b = parseInt(hexcolor.substr(5, 2), 16);
+            const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+            return brightness > 128 ? '#000000' : '#FFFFFF';
+        }
+        
+        function viewPalette(paletteId) {
+            // Navigate to palette view/edit page
+            window.location.href = `palette.html?id=${paletteId}`;
+        }
+    </script>
+
+    <!-- Authentication Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-content">
+            <button class="auth-close" id="authClose">&times;</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+            
+            <div class="auth-form active" id="login-form">
+                <h2>Welcome Back</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="auth-submit">Login</button>
+                </form>
+                <p class="auth-switch">Don't have an account? <a href="#" data-switch="register">Sign up</a></p>
+            </div>
+            
+            <div class="auth-form" id="register-form">
+                <h2>Create Account</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirm">Confirm Password</label>
+                        <input type="password" id="registerConfirm" required>
+                    </div>
+                    <button type="submit" class="auth-submit">Create Account</button>
+                </form>
+                <p class="auth-switch">Already have an account? <a href="#" data-switch="login">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
